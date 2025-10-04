@@ -7,10 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController                     //Anotação que une @Controller e @ResponseBody. Diz ao Spring que essa classe lida com requisições web e que po retorno (string) deve ser enviado diretammente como resposta do corpo http
-@RequestMapping("api/v1/users")     //Define a URL base para todos os métodos deste Controller. A URL final será /api/v1/users mais a URL de cada método. No POSTMAN, em GET,adicione: http://localhost:8080/api/v1/users/hello para teste
+@RestController
+@RequestMapping("api/v1/users")
 public class UserController {
 
+    // Injeção de Dependência via Construtor
     private final UserService userService;
 
     public UserController(UserService userService){
@@ -19,48 +20,39 @@ public class UserController {
 
     @PostMapping
     public  ResponseEntity<UserResponseDto> criaUsuario(@RequestBody UserRequestDto userDto) {
+        // Delega a criação para o Serviço e usa o status 201 CREATED
         UserResponseDto userResponseDto = userService.criaUsuario(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> buscaUsuarioPorId(@PathVariable Long id){
-
+        // Delega a busca por ID para o Serviço e usa o status 200 OK
         UserResponseDto userResponseDto = userService.buscaUsuarioPorId(id);
+        return ResponseEntity.ok(userResponseDto);
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<UserResponseDto> buscaUsuarioPorEmail(@RequestParam String email){
+        // Delega a busca por E-mail para o Serviço e usa o status 200 OK
+        UserResponseDto userResponseDto = userService.buscaUsuarioPorEmail(email);
         return ResponseEntity.ok(userResponseDto);
     }
 
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> atualizaUsuario(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto){
-
-        Long atualizaId = 1L; // no futuro, isso virá do banco de dados
-        UserResponseDto userResponseDto = new UserResponseDto(
-                atualizaId,
-                userRequestDto.getUsername(),
-                userRequestDto.getEmail()
-        );
+        // Delega a atualização para o Serviço. A lógica de atualização foi movida para lá.
+        UserResponseDto userResponseDto = userService.atualizaUsuario(id, userRequestDto);
         return ResponseEntity.ok(userResponseDto);
     }
 
-
-    @GetMapping("/search")
-    public String pesquisaUsuarioNome(@RequestParam String nome) {       //O Spring vai procurar por um parâmetro chamado nome depois do ? na URL.
-
-        //futuramente, pesquisar nome do usuario no banco de dados
-        return "Buscando o usuário com o mone : " + nome;
-    }
-
-
-    @GetMapping("/{id}/perfil")
-    public String buscaUsuarioPerfil(@PathVariable Long id, @RequestParam String nomeCompleto) {
-        return "O perfil do usuário de ID " + id + " é de " + nomeCompleto;
-    }
-
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserResponseDto> deletaUsuario(@PathVariable Long id) {
+    public ResponseEntity<Void> deletaUsuario(@PathVariable Long id) {
+        // Delega a exclusão para o Serviço
+        userService.deletaUsuario(id);
+
+        // Retorna o status 204 NO CONTENT e corpo vazio (Void)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }
