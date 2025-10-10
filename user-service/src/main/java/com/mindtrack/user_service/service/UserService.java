@@ -5,6 +5,8 @@ import com.mindtrack.user_service.dto.UserRequestDto;
 import com.mindtrack.user_service.dto.UserResponseDto;
 import com.mindtrack.user_service.mapper.UserMapper;
 import com.mindtrack.user_service.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +31,13 @@ public class UserService {
 
         // Retorna o DTO de Resposta (Mapeado da Entidade salva)
         return userMapper.toDto(userSalvo);
+    }
+
+    public Page<UserResponseDto> buscaTodosUsuarios(Pageable pageable) {
+        // Busca a Entidade e lança exceção se não encontrar
+        Page<User> userPage = userRepository.findAll(pageable);
+        // Mapeia Entidade para DTO
+        return userPage.map(userMapper::toDto);
     }
 
     public UserResponseDto buscaUsuarioPorId(Long id) {
