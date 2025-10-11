@@ -1,10 +1,7 @@
 package br.com.ayrs.mindtrack.study.controller;
 
-import br.com.ayrs.mindtrack.study.dto.SubjectRequestDto;
-import br.com.ayrs.mindtrack.study.dto.SubjectResponseDto;
 import br.com.ayrs.mindtrack.study.dto.TaskRequestDto;
 import br.com.ayrs.mindtrack.study.dto.TaskResponseDto;
-import br.com.ayrs.mindtrack.study.service.SubjectService;
 import br.com.ayrs.mindtrack.study.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;

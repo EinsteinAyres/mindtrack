@@ -16,4 +16,6 @@ public class TaskResponseDto {
     private String title;
     private String description;
 
+    public TaskResponseDto(Long id, String title, String description) {
+    }
 }

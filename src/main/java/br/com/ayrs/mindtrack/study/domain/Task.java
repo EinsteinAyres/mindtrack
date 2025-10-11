@@ -19,7 +19,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "SUBJECT_ID")
-    private Subject subject;
+    private SubjectId subjectId;
 
     private String title;
     private String description;

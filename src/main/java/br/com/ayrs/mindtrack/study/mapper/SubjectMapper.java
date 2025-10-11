@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SubjectMapper {
 
-
     public Subject toEntity(SubjectRequestDto subjectDto) {
         if (subjectDto == null) {
             return null;

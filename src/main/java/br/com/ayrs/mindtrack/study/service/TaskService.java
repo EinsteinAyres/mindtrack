@@ -53,12 +53,8 @@ public class TaskService {
     public TaskResponseDto atualizaTask(Long id, TaskRequestDto taskDto) {
         Task taskExistente = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task com ID " + id + " não pode ser atualizada: não encontrada!"));
-
-        // Atualiza os campos
         taskExistente.setTitle(taskDto.getTitle());
         taskExistente.setDescription(taskDto.getDescription());
-
-        // Atualiza o Subject, se necessário
         if (!taskExistente.getSubject().getId().equals(taskDto.getSubjectId())) {
             Subject novoSubject = subjectRepository.findById(taskDto.getSubjectId())
                     .orElseThrow(() -> new RuntimeException("Matéria com ID " + taskDto.getSubjectId() + " não encontrada!"));
