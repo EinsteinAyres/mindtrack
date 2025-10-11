@@ -10,4 +10,6 @@ public class MindtrackApplication {
         SpringApplication.run(MindtrackApplication.class, args);
     }
 
+    //Tutor: https://gemini.google.com/app/71b53ef89e8321a1
+
 }

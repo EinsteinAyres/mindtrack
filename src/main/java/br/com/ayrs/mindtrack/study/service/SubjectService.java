@@ -23,21 +23,14 @@ public class SubjectService {
     }
 
     public SubjectResponseDto criaMateria(SubjectRequestDto subjectDto) {
-        // Usa o Mapper para converter DTO para Entidade
         Subject subject = subjectMapper.toEntity(subjectDto);
-
-        // Salva no banco de dados (Repository)
         Subject subjectSalvo = subjectRepository.save(subject);
-
-        // Retorna o DTO de Resposta (Mapeado da Entidade salva)
         return subjectMapper.toDto(subjectSalvo);
     }
 
     public Page<SubjectResponseDto> buscaTodasMaterias(Pageable pageable) {
-        // Busca a Entidade e lança exceção se não encontrar
         Page<Subject> subjectPage = subjectRepository.findAll(pageable);
-        // Mapeia Entidade para DTO
-        return subjectPage.map(subjectMapper::toDto);
+       return subjectPage.map(subjectMapper::toDto);
     }
 
     public SubjectResponseDto buscaMateriaPorId(Long id) {
