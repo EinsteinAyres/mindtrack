@@ -1,144 +1,105 @@
-# 🧠 **MINDTRACK: Sistema Inteligente de Gestão e Otimização de Estudos**
+# 🧠 **user-service: Microsserviço de Gestão de Usuários (MINDTRACK)**
 
-O **MINDTRACK** é um sistema modular e inteligente de **produtividade e gestão de estudos**.
-Baseado em **neurociência** e **princípios de foco**, utiliza **arquitetura de microsserviços** em **Java/Spring Boot** para oferecer ferramentas avançadas como:
+O **user-service** é o microsserviço fundamental do projeto **MINDTRACK**.
+Sua responsabilidade é exclusiva: **gerenciar o ciclo de vida completo dos usuários**, incluindo **cadastro**, **autenticação (futura)**, **busca** e **manipulação de perfis**.
 
-* 🕒 **Pomodoro Personalizável**
-* 🧩 **Análise Cognitiva**
-* 🔁 **Integração com Repetição Espaçada (SRS)**
+Este módulo é o **pilar central** da aplicação, pois **todos os outros microsserviços dependerão dele** para identificar e validar os estudantes.
 
 ---
 
-## 📈 **Status Atual**
+## 🧱 **Arquitetura e Fundamentos**
 
-**Fase 1: MVP — Fundamentos de Microsserviços e Backend**
+O microsserviço é construído seguindo a **Arquitetura de 3 Camadas (Model-View-Controller)**, adaptada para REST, e utiliza princípios de **Domain-Driven Design (DDD)**, onde a lógica de negócio reside na camada de **Serviço**.
 
-> ✅ Conclusão do **user-service**.
+### 🔹 1. Camadas Principais
 
----
-
-## 🎯 **Propósito e Visão**
-
-O **objetivo principal** do MINDTRACK é **combater a procrastinação e a sobrecarga de informação**, oferecendo:
-
-* Micro-objetivos claros
-* Rastreamento de foco em tempo real
-* Ferramentas de otimização de aprendizado (IA e perfis cognitivos)
-
-É um projeto que **une produtividade real** com **desenvolvimento full-stack profissional**.
+| **Camada**     | **Responsabilidade**                                                                                         | **Tecnologias-Chave**                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| **Controller** | Recebe requisições HTTP (*Porteiro*). Delega tarefas e retorna a resposta formatada (Status Code e DTO).     | `@RestController`, `@RequestMapping`, `ResponseEntity`  |
+| **Service**    | Contém a regra de negócio (*Gerente*). Valida dados, usa o Mapper para conversão e orquestra a persistência. | `@Service`, Injeção de Dependências, `RuntimeException` |
+| **Repository** | Interface de comunicação com o banco de dados (*Arquivista*). Usa métodos mágicos do Spring Data JPA.        | `JpaRepository`, `@Repository`                          |
 
 ---
 
-## 🧱 **Arquitetura de Microsserviços**
+### 🔹 2. Objetos de Mapeamento (DTOs e Entidade)
 
-O MINDTRACK é construído como um **conjunto de microsserviços independentes** que se comunicam via **APIs REST** e, futuramente, por **Mensageria (Kafka/RabbitMQ)**.
-
-Essa abordagem garante:
-
-* **Escalabilidade**
-* **Resiliência**
-* **Atualizações independentes**
-
----
-
-### ⚙️ **Microsserviços Essenciais (Fase 1 e Futuro)**
-
-| **Microsserviço**     | **Responsabilidade Principal**                            | **Status**               |
-| --------------------- | --------------------------------------------------------- | ------------------------ |
-| **user-service**      | Gerenciamento de Usuários, Perfis e Autenticação (JWT).   | ✅ MVP Concluído          |
-| **study-service**     | CRUD de Matérias, Tarefas, Metas e Planejamento.          | 🔜 Próximo a Implementar |
-| **pomodoro-service**  | API para controle de sessões, histórico de foco e pausas. | ⏳ Futuro                 |
-| **stats-service**     | Dashboard, métricas, relatórios e estatísticas.           | ⏳ Futuro                 |
-| **gateway-service**   | API Gateway, Roteamento e Segurança centralizada.         | ⏳ Futuro                 |
-| **config-service**    | Centralização das configurações (Config Server).          | ⏳ Futuro                 |
-| **discovery-service** | Registro e Descoberta de Serviços (Eureka).               | ⏳ Futuro                 |
+| **Objeto**          | **Propósito**                                                                                 | **Camada** |
+| ------------------- | --------------------------------------------------------------------------------------------- | ---------- |
+| **User**            | Representa a tabela no banco de dados (`@Entity`). Contém todos os campos, incluindo a senha. | `domain`   |
+| **UserRequestDto**  | Recebe dados do cliente (payload de POST/PUT).                                                | `dto`      |
+| **UserResponseDto** | Retorna dados ao cliente, **sem expor a senha**.                                              | `dto`      |
+| **UserMapper**      | Converte entre DTO e Entidade, mantendo o `Service` limpo.                                    | `mapper`   |
 
 ---
 
-## 🚀 **Plano de Evolução do Projeto (Fases)**
+## ⚙️ **Tecnologias Utilizadas (MVP)**
 
-O projeto é dividido em **quatro fases** de aprendizado e desenvolvimento, com foco em **micro-objetivos alcançáveis**.
-
-| **Fase**                      | **Objetivo Principal**                                                                 | **Aprendizados-Chave**                                                 |
-| ----------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| **1: MVP e Fundamentos**      | Consolidar Java Spring, Persistência e CRUDs básicos.                                  | Spring Boot, JPA, H2/PostgreSQL, DTOs, Injeção de Dependências.        |
-| **2: Produtividade Avançada** | Notas Enriquecidas, Pomodoro Personalizável, Gamificação e Upload de Arquivos.         | WebFlux (Opcional), Uploads, Cache.                                    |
-| **3: Inteligência e IA**      | Sistema de Repetição Espaçada (SRS), Análise Comportamental e IA (Resumo/Transcrição). | Kafka/RabbitMQ, Integração com APIs Externas, Microsserviços Reativos. |
-| **4: Front-End e Premium**    | Interface Angular/React e Recursos Premium (Colaboração, Billing).                     | Angular/React, Consumo de APIs, WebSockets.                            |
+* **Linguagem:** Java 17+
+* **Framework:** Spring Boot 3+
+* **Persistência:** Spring Data JPA / Hibernate
+* **Banco de Dados (Dev/Testes):** H2 Database (em memória)
+* **Ferramenta:** Lombok (para getters/setters)
 
 ---
 
-## 🛠️ **Tecnologias Core**
+## 📌 **Endpoints da API (CRUD Completo)**
 
-| **Categoria** | **Stack**                                             | **Detalhes**                              |
-| ------------- | ----------------------------------------------------- | ----------------------------------------- |
-| **Backend**   | Java 17+, Spring Boot 3+, Spring Data JPA, Lombok     | Core do sistema e lógica de negócio.      |
-| **Infra**     | PostgreSQL (Prod), H2 Database (Dev), Docker (Futuro) | Gerenciamento de dados e conteinerização. |
-| **APIs**      | RESTful Services, OpenFeign                           | Comunicação entre microsserviços.         |
-| **Frontend**  | Angular (ou React)                                    | Interface do usuário (Fase 4).            |
+O `user-service` expõe os seguintes endpoints REST sob a URL base:
 
----
+```
+/api/v1/users
+```
 
-## 💻 **Configuração e Execução Local (MVP)**
-
-### **Pré-requisitos**
-
-* ☕ Java Development Kit (**JDK 17+**)
-* 🧩 **Maven** (Gerenciador de dependências)
-* 💻 IDE de sua preferência (**IntelliJ IDEA**, **VS Code**, etc.)
-* 🧪 **Postman** ou **Thunder Client** para testar APIs
+| **Operação**       | **Verbo HTTP** | **URI**                         | **Descrição**                                  |
+| ------------------ | -------------- | ------------------------------- | ---------------------------------------------- |
+| **Criar**          | `POST`         | `/api/v1/users`                 | Cadastra um novo usuário no sistema.           |
+| **Buscar (ID)**    | `GET`          | `/api/v1/users/{id}`            | Busca um usuário pelo ID.                      |
+| **Buscar (Email)** | `GET`          | `/api/v1/users/email?email=...` | Busca um usuário pelo endereço de e-mail.      |
+| **Atualizar**      | `PUT`          | `/api/v1/users/{id}`            | Atualiza todos os dados de um usuário pelo ID. |
+| **Deletar**        | `DELETE`       | `/api/v1/users/{id}`            | Remove um usuário do banco de dados.           |
 
 ---
 
-### **1️⃣ Clonar e Compilar**
+## 💡 **Detalhes de Implementação**
 
-```bash
-# Clone o repositório principal
-git clone <URL_DO_REPOSITORIO>
-cd mindtrack
+### 🔸 Injeção de Dependências
 
-# Navegue para o primeiro microsserviço
-cd user-service
+O princípio **Inversão de Controle (IoC)** do Spring é aplicado em todas as camadas:
 
-# Compile o projeto (se necessário)
-mvn clean install
+* `UserController` injeta `UserService` via construtor.
+* `UserService` injeta `UserRepository` e `UserMapper` via construtor.
+
+✅ Essa prática garante **baixo acoplamento** e **alto grau de testabilidade**.
+
+---
+
+### 🔸 JpaRepository e Buscas
+
+O `UserRepository` demonstra o poder das **Query Methods** do Spring Data:
+
+```java
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email); // O Spring gera a Query SQL automaticamente!
+}
 ```
 
 ---
 
-### **2️⃣ Executar o user-service**
+### 🔸 Tratamento de Erros e Optional
 
-Execute a aplicação pelo método `main` da classe `UserServiceApplication.java`
-ou via terminal:
+Para garantir robustez, os métodos de busca utilizam `Optional<T>` retornado pelo `JpaRepository`:
 
-```bash
-cd user-service
-java -jar target/<nome-do-arquivo>.jar
+```java
+User userEncontrado = userRepository.findById(id)
+    .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
 ```
 
-A API estará disponível em:
-
-```
-http://localhost:8080
-```
-
-*(Configuração padrão do Spring Boot)*
+O uso de `orElseThrow()` assegura que, se o dado não for encontrado, uma exceção seja lançada —
+permitindo que o `Controller` trate o erro (no futuro retornando **HTTP 404 - Not Found**).
 
 ---
 
-### **3️⃣ Teste o CRUD**
+## 🚀 **Próximos Passos**
 
-Use o **Postman** para testar o fluxo completo do CRUD no `user-service`:
-
-| **Ação**              | **Método HTTP** | **Endpoint**         | **Retorno Esperado** |
-| --------------------- | --------------- | -------------------- | -------------------- |
-| **Criar Usuário**     | `POST`          | `/api/v1/users`      | `201 Created`        |
-| **Buscar Usuário**    | `GET`           | `/api/v1/users/{id}` | `200 OK`             |
-| **Atualizar Usuário** | `PUT`           | `/api/v1/users/{id}` | `204 No Content`     |
-| **Deletar Usuário**   | `DELETE`        | `/api/v1/users/{id}` | `204 No Content`     |
-
----
-
-### 🧩 **Resultado**
-
-Após o sucesso do `user-service`, os próximos módulos (como `study-service` e `pomodoro-service`) expandirão o ecossistema MINDTRACK, criando uma **plataforma integrada de estudo e foco**, evoluindo de **MVP Backend** para **sistema completo full-stack**.
+Este é um **excelente ponto de partida**.
+A próxima etapa será **lidar com múltiplas requisições simultâneas** e **retornar listas de dados de forma eficiente**, evoluindo para **consultas paginadas e filtradas**.
