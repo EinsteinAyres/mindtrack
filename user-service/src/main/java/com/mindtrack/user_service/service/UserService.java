@@ -63,16 +63,11 @@ public class UserService {
         User userExistente = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário com ID " + id + " não pode ser atualizado: não encontrado!"));
 
-        // 2. Mapeia/atualiza os campos do DTO para a Entidade existente
-        // Mantém o ID original do usuário
         userExistente.setUsername(userDto.getUsername());
         userExistente.setEmail(userDto.getEmail());
-        userExistente.setPassword(userDto.getPassword()); // Futuramente, faremos hash antes de salvar!
+        userExistente.setPassword(userDto.getPassword());
 
-        // 3. Salva a Entidade atualizada
         User userAtualizado = userRepository.save(userExistente);
-
-        // 4. Mapeia e retorna o DTO de Resposta
         return userMapper.toDto(userAtualizado);
     }
 

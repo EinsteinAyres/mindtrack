@@ -15,6 +15,4 @@ public class UserResponseDto {
     private String nome;
     private String email;
 
-
-
 }
