@@ -1,24 +1,24 @@
-package br.com.ayrs.mindtrack.study.mapper;
+package br.com.ayrs.mindtrack.pomodoro.mapper;
 
-import br.com.ayrs.mindtrack.study.domain.Task;
-import br.com.ayrs.mindtrack.study.dto.TaskRequestDto;
-import br.com.ayrs.mindtrack.study.dto.TaskResponseDto;
+import br.com.ayrs.mindtrack.pomodoro.domain.Session;
+import br.com.ayrs.mindtrack.pomodoro.dto.TaskRequestDto;
+import br.com.ayrs.mindtrack.pomodoro.dto.TaskResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TaskMapper {
 
-    public Task toEntity(TaskRequestDto taskDto) {
+    public Session toEntity(TaskRequestDto taskDto) {
         if (taskDto == null) {
             return null;
         }
-        Task task = new Task();
+        Session task = new Session();
         task.setTitle(taskDto.getTitle());
         task.setDescription(taskDto.getDescription());
         return task;
     }
 
-    public TaskResponseDto toDto(Task task) {
+    public TaskResponseDto toDto(Session task) {
 
         if (task == null) {
             return null;

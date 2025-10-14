@@ -16,12 +16,12 @@ public class UserController {
     // Injeção de Dependência via Construtor
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService){
         this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> criaUsuario(@RequestBody UserRequestDto userDto) {
+    public  ResponseEntity<UserResponseDto> criaUsuario(@RequestBody UserRequestDto userDto) {
         // Delega a criação para o Serviço e usa o status 201 CREATED
         UserResponseDto userResponseDto = userService.criaUsuario(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
